@@ -5,13 +5,13 @@ import gym
 import numpy as np
 import torch
 from torch import nn
-from torch.distributions import Normal
-from torch.nn import functional as F
-from torch.optim import Adam
 import random
-    
 
-def evaluate_policy(env, agent, episodes=5):
+from PPO import PPO
+from params import  ENV_NAME, MIN_EPISODES_PER_UPDATE, MIN_TRANSITIONS_PER_UPDATE, ITERATIONS
+
+
+def evaluate_policy(env, agent, episodes):
     returns = []
     for _ in range(episodes):
         done = False
@@ -35,7 +35,7 @@ def sample_episode(env, agent):
         ns, r, d, _ = env.step(a)
         trajectory.append((s, pa, r, p, v))
         s = ns
-    return compute_lambda_returns_and_gae(trajectory)
+    return trajectory
 
 
 def train():
@@ -44,6 +44,8 @@ def train():
     state = env.reset()
     episodes_sampled = 0
     steps_sampled = 0
+
+    best = 0
     
     for i in range(ITERATIONS):
         trajectories = []
@@ -59,10 +61,12 @@ def train():
         ppo.update(trajectories)        
         
         if (i + 1) % (ITERATIONS//100) == 0:
-            rewards = evaluate_policy(env, ppo, 5)
-            print(f"Step: {i+1}, Reward mean: {np.mean(rewards)}, Reward std: {np.std(rewards)}, \\
-                    Episodes: {episodes_sampled}, Steps: {steps_sampled}")
-            ppo.save()
+            rewards = evaluate_policy(env, ppo, 20)
+            print(f"Step: {i+1}, Reward mean: {np.mean(rewards)}, Reward std: {np.std(rewards)}, Episodes: {episodes_sampled}, Steps: {steps_sampled}")
+            val = np.mean(rewards)
+            if val > best:
+                best = val
+                ppo.save()
 
 
 def init_random_seeds(RANDOM_SEED):

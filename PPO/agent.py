@@ -1,4 +1,3 @@
-
 import random
 import numpy as np
 import os
@@ -12,7 +11,8 @@ class Agent:
     def act(self, state):
         with torch.no_grad():
             state = torch.tensor(np.array(state)).float()
-            return None # TODO
+            a, _, _ = self.model.act(state)
+            return a
 
     def reset(self):
         pass
