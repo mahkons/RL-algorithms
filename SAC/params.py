@@ -1,0 +1,15 @@
+import torch
+
+ENV_NAME = "AntBulletEnv-v0"
+DEVICE = torch.device("cuda")
+
+BUFFER_SIZE = 1000000
+INIT_BUFFER_SIZE = 10000
+START_STEPS = 20000
+
+GAMMA = 0.99
+TAU = 0.005
+LR = 3e-4
+
+BATCH_SIZE = 256
+TRANSITIONS = 2000000
