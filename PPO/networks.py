@@ -18,15 +18,12 @@ class Actor(nn.Module):
         self.sigma = nn.Parameter(torch.zeros(action_dim))
         
     def compute_proba(self, state, action):
-        # Returns probability of action according to current policy and distribution of actions (use it to compute entropy loss) 
         mu = self.model(state)
         sigma = torch.exp(self.sigma).unsqueeze(0).expand_as(mu)
         distr = torch.distributions.Normal(mu, sigma)
         return distr.log_prob(action).sum(axis=1), distr
         
     def act(self, state):
-        # Returns an action, not-transformed action and distribution
-        # Remember: agent is not deterministic, sample actions from distribution (e.g. Gaussian)
         mu = self.model(state)
         sigma = torch.exp(self.sigma).unsqueeze(0).expand_as(mu)
         distr = torch.distributions.Normal(mu, sigma)

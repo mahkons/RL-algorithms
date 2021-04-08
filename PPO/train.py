@@ -30,10 +30,9 @@ def sample_episode(env, agent):
     d = False
     trajectory = []
     while not d:
-        a, pa, p = agent.act(s)
-        v = agent.get_value(s)
+        a, pa, logprob = agent.act(s)
         ns, r, d, _ = env.step(a)
-        trajectory.append((s, pa, r, p, v))
+        trajectory.append((s, pa, r, logprob))
         s = ns
     return trajectory
 
@@ -49,14 +48,14 @@ def train():
     
     for i in range(ITERATIONS):
         trajectories = []
-        steps_ctn = 0
+        steps_cnt = 0
         
-        while len(trajectories) < MIN_EPISODES_PER_UPDATE or steps_ctn < MIN_TRANSITIONS_PER_UPDATE:
+        while len(trajectories) < MIN_EPISODES_PER_UPDATE or steps_cnt < MIN_TRANSITIONS_PER_UPDATE:
             traj = sample_episode(env, ppo)
-            steps_ctn += len(traj)
+            steps_cnt += len(traj)
             trajectories.append(traj)
         episodes_sampled += len(trajectories)
-        steps_sampled += steps_ctn
+        steps_sampled += steps_cnt
 
         ppo.update(trajectories)        
         

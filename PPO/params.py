@@ -3,8 +3,8 @@ ENV_NAME = "Walker2DBulletEnv-v0"
 LAMBDA = 0.95
 GAMMA = 0.99
 
-ACTOR_LR = 2e-4
-CRITIC_LR = 1e-4
+LR = 2e-4
+VALUE_COEFF = 0.5
 
 CLIP = 0.2
 ENTROPY_COEF = 1e-2
