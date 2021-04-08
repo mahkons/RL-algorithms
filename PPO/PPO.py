@@ -37,7 +37,6 @@ class PPO():
         old_log_prob = np.array(old_log_prob)
         target_value = np.array(target_value)
         advantage = np.array(advantage)
-        advnatage = (advantage - advantage.mean()) / (advantage.std() + 1e-8)
         
         for _ in range(BATCHES_PER_UPDATE):
             idx = np.random.randint(0, len(transitions), BATCH_SIZE) # Choose random batch

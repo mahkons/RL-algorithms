@@ -8,11 +8,11 @@ class Actor(nn.Module):
         super().__init__()
         self.model = nn.Sequential(
             nn.Linear(state_dim, 400),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(400, 300),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(300, 150),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(150, action_dim)
         )
         self.sigma = nn.Parameter(torch.zeros(action_dim))
@@ -37,11 +37,11 @@ class Critic(nn.Module):
         super().__init__()
         self.model = nn.Sequential(
             nn.Linear(state_dim, 400),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(400, 300),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(300, 150),
-            nn.ELU(inplace=True),
+            nn.GELU(),
             nn.Linear(150, 1)
         )
         
